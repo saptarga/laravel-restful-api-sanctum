@@ -119,3 +119,7 @@ Response
     "message": "You have successfully logged out and the token was successfully deleted"
 }
 ```
+
+## Reference
+
+-   https://laravel.com/docs/8.x/sanctum
