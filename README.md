@@ -1,64 +1,121 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400"></a></p>
+# LARAVEL 8 - RESTFUL API - SANCTUM AUTHENTICATION
 
-<p align="center">
-<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+## Description
 
-## About Laravel
+Simple Restful API Using Laravel 8 And Sanctum Authentication.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+Learning by Doing from https://codelapan.com/post/laravel-8-rest-api-authentication-dengan-sanctum
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Requirements
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+-   PHP >= 7.0.0
+-   Database MYSQL
+-   PDO PHP Extension
 
-## Learning Laravel
+## Installation
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+```sh
+# CLone this project
+git@github.com:saptarga/laravel-restful-api-sanctum.git
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 1500 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+# Install dependency
+composer install
+npm install
 
-## Laravel Sponsors
+# Copy configuration for local development, and please set configuration for local development
+cp .env.example .env
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+# Run migration file
+php artisan migrate
 
-### Premium Partners
+# Run Service
+php artisan serve
+```
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[OP.GG](https://op.gg)**
-- **[CMS Max](https://www.cmsmax.com/)**
-- **[WebReinvent](https://webreinvent.com/?utm_source=laravel&utm_medium=github&utm_campaign=patreon-sponsors)**
+## Example Rest API
 
-## Contributing
+### Request Register User
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+Request
 
-## Code of Conduct
+```http
+curl --location --request POST 'http://127.0.0.1:8000/api/register' \
+--form 'name="AdminTest"' \
+--form 'email="admin_test@gmail.com"' \
+--form 'password="1234567890"'
+```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+Response
 
-## Security Vulnerabilities
+```json
+{
+    "data": {
+        "name": "AdminTest",
+        "email": "admin_test@gmail.com",
+        "updated_at": "2021-10-04T04:01:57.000000Z",
+        "created_at": "2021-10-04T04:01:57.000000Z",
+        "id": 2
+    },
+    "access_token": "4|IGRNRc05hww5nyMjrJE8M3pqvnnzuCgU8k5ADFb3",
+    "token_type": "Bearer"
+}
+```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+### Request Login User
 
-## License
+Request
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+```http
+curl --location --request POST 'http://127.0.0.1:8000/api/login' \
+--form 'email="admin_test@gmail.com"' \
+--form 'password="1234567890"'
+```
+
+Response
+
+```json
+{
+    "message": "Hi AdminTest, welcome to home",
+    "access_token": "5|G127DSNrWp6buBEi5TzOFMqs35mhDbTznLbPDc6D",
+    "token_type": "Bearer"
+}
+```
+
+### Request Get Profile User
+
+Request
+
+```http
+curl --location --request GET 'http://127.0.0.1:8000/api/profile' \
+--header 'Authorization: Bearer 5|G127DSNrWp6buBEi5TzOFMqs35mhDbTznLbPDc6D'
+```
+
+Response
+
+```json
+{
+    "id": 2,
+    "name": "AdminTest",
+    "email": "admin_test@gmail.com",
+    "email_verified_at": null,
+    "created_at": "2021-10-04T04:01:57.000000Z",
+    "updated_at": "2021-10-04T04:01:57.000000Z"
+}
+```
+
+### Request Logout
+
+Request
+
+```http
+curl --location --request POST 'http://127.0.0.1:8000/api/logout' \
+--header 'Authorization: Bearer 5|G127DSNrWp6buBEi5TzOFMqs35mhDbTznLbPDc6D'
+```
+
+Response
+
+```json
+{
+    "message": "You have successfully logged out and the token was successfully deleted"
+}
+```
